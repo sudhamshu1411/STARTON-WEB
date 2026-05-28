@@ -1,0 +1,89 @@
+diff --git a/node_modules/@paper-design/shaders/dist/shaders/color-panels.js b/node_modules/@paper-design/shaders/dist/shaders/color-panels.js
+index ed8fcbd..f7e0667 100644
+--- a/node_modules/@paper-design/shaders/dist/shaders/color-panels.js
++++ b/node_modules/@paper-design/shaders/dist/shaders/color-panels.js
+@@ -9,10 +9,10 @@ const colorPanelsMeta = {
+   maxColorCount: 7
+ };
+ const colorPanelsFragmentShader = `#version 300 es
+-precision lowp float;
++precision highp float;
+ 
+ uniform float u_time;
+-uniform mediump float u_scale;
++uniform highp float u_scale;
+ 
+ uniform vec4 u_colors[${colorPanelsMeta.maxColorCount}];
+ uniform float u_colorsCount;
+diff --git a/node_modules/@paper-design/shaders/dist/shaders/grain-gradient.js b/node_modules/@paper-design/shaders/dist/shaders/grain-gradient.js
+index ed7a3fc..33aef70 100644
+--- a/node_modules/@paper-design/shaders/dist/shaders/grain-gradient.js
++++ b/node_modules/@paper-design/shaders/dist/shaders/grain-gradient.js
+@@ -16,11 +16,11 @@ const grainGradientMeta = {
+   maxColorCount: 7
+ };
+ const grainGradientFragmentShader = `#version 300 es
+-precision lowp float;
++precision highp float;
+ 
+-uniform mediump float u_time;
+-uniform mediump vec2 u_resolution;
+-uniform mediump float u_pixelRatio;
++uniform highp float u_time;
++uniform highp vec2 u_resolution;
++uniform highp float u_pixelRatio;
+ 
+ uniform sampler2D u_noiseTexture;
+ 
+@@ -32,16 +32,16 @@ uniform float u_intensity;
+ uniform float u_noise;
+ uniform float u_shape;
+ 
+-uniform mediump float u_originX;
+-uniform mediump float u_originY;
+-uniform mediump float u_worldWidth;
+-uniform mediump float u_worldHeight;
+-uniform mediump float u_fit;
++uniform highp float u_originX;
++uniform highp float u_originY;
++uniform highp float u_worldWidth;
++uniform highp float u_worldHeight;
++uniform highp float u_fit;
+ 
+-uniform mediump float u_scale;
+-uniform mediump float u_rotation;
+-uniform mediump float u_offsetX;
+-uniform mediump float u_offsetY;
++uniform highp float u_scale;
++uniform highp float u_rotation;
++uniform highp float u_offsetX;
++uniform highp float u_offsetY;
+ 
+ in vec2 v_objectUV;
+ in vec2 v_patternUV;
+diff --git a/node_modules/@paper-design/shaders/dist/shaders/pulsing-border.js b/node_modules/@paper-design/shaders/dist/shaders/pulsing-border.js
+index 464e5f7..c31cc81 100644
+--- a/node_modules/@paper-design/shaders/dist/shaders/pulsing-border.js
++++ b/node_modules/@paper-design/shaders/dist/shaders/pulsing-border.js
+@@ -10,7 +10,7 @@ const pulsingBorderMeta = {
+   maxSpots: 4
+ };
+ const pulsingBorderFragmentShader = `#version 300 es
+-precision lowp float;
++precision highp float;
+ 
+ uniform float u_time;
+ 
+diff --git a/node_modules/@paper-design/shaders/dist/vertex-shader.js b/node_modules/@paper-design/shaders/dist/vertex-shader.js
+index 73d7aba..ac9a5bd 100644
+--- a/node_modules/@paper-design/shaders/dist/vertex-shader.js
++++ b/node_modules/@paper-design/shaders/dist/vertex-shader.js
+@@ -4,7 +4,7 @@
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ 
+ const vertexShaderSource = `#version 300 es
+-precision mediump float;
++precision highp float;
+ 
+ layout(location = 0) in vec4 a_position;
+ 

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://starton.agency/sitemap.xml
