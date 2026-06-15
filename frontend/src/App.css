@@ -6455,78 +6455,51 @@ a.insights-featured-card {
 .solp-metrics-p2 { --m-accent: var(--sol-p2); --m-soft: var(--sol-p2-soft); }
 .solp-metrics-p3 { --m-accent: var(--sol-p3); --m-soft: var(--sol-p3-soft); }
 .solp-scene--metrics .solp-scene-stage {
-  color: #fff;
-  background: #07070f;
+  color: var(--sol-ink);
+  background: transparent;
 }
 
-/* Full-bleed photographic canvas ---------------------------------------- */
-.solp-metrics-canvas { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
-.solp-metric-photo {
-  position: absolute;
-  inset: -8%;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transform: scale(1.16)
-    translate3d(calc(var(--mx, 0) * -26px), calc(var(--my, 0) * -26px), 0);
-  transition: opacity 1100ms var(--par-ease), transform 1600ms var(--par-ease);
-  filter: brightness(0.34) saturate(0.72) contrast(1.08);
-}
-.solp-metric-photo.is-on {
-  opacity: 1;
-  transform: scale(1.04)
-    translate3d(calc(var(--mx, 0) * -26px), calc(var(--my, 0) * -26px), 0);
-}
-.solp-metric-photo.is-past { opacity: 0; transform: scale(0.98); }
-.solp-metrics-grade {
-  position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(100deg, rgba(7,7,15,0.94) 0%, rgba(7,7,15,0.64) 42%, rgba(7,7,15,0.18) 72%, rgba(7,7,15,0.58) 100%),
-    radial-gradient(120% 82% at 16% 84%, color-mix(in srgb, var(--m-accent) 28%, transparent) 0%, transparent 60%);
-  transition: background 700ms var(--par-ease);
-}
-.solp-metrics-grain {
-  position: absolute; inset: 0; pointer-events: none;
-  opacity: 0.45; mix-blend-mode: overlay;
-  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.05) 0 1px, transparent 1px 3px);
-}
-
-/* Mega ghost numeral ----------------------------------------------------- */
+/* Mega ghost numeral — bare on the page background, accent-tinted -------- */
 .solp-metrics-ghost {
-  position: absolute; z-index: 1; right: -2vw; bottom: -10vh;
+  position: absolute; z-index: 0; right: -2vw; bottom: -12vh;
   pointer-events: none; user-select: none;
   font-family: var(--sol-display); font-weight: 700;
   font-size: clamp(360px, 56vw, 980px);
   line-height: 0.74; letter-spacing: -0.08em;
   font-variation-settings: "wdth" 64;
-  color: transparent;
-  background: linear-gradient(180deg, color-mix(in srgb, var(--m-accent) 22%, transparent) 0%, rgba(255,255,255,0.015) 100%);
-  -webkit-background-clip: text; background-clip: text;
+  color: var(--m-accent);
+  opacity: 0.12;
+  mix-blend-mode: multiply;
   transform:
     translate3d(calc(var(--mx, 0) * 40px), calc(var(--p, 0) * -160px + var(--my, 0) * 30px), 0)
     rotate(calc(-2deg + var(--p, 0) * 8deg));
-  transition: background 700ms var(--par-ease);
+  transition: color 700ms var(--par-ease);
   will-change: transform;
+}
+:root.dark-theme .solp-metrics-ghost {
+  mix-blend-mode: screen;
+  opacity: 0.16;
 }
 
 /* Layout ----------------------------------------------------------------- */
 .solp-metrics-grid { position: relative; z-index: 2; }
 .solp-metrics-head { margin-bottom: clamp(24px, 3vw, 44px); max-width: 36ch; }
 .solp-metrics-label {
-  color: rgba(255,255,255,0.55);
+  color: var(--sol-ink-quiet);
   margin-bottom: 14px;
 }
 .solp-metrics-title {
   font-family: var(--sol-display); font-weight: 700;
   font-size: clamp(30px, 4vw, 56px); line-height: 1.0;
   letter-spacing: -0.03em; margin: 0 0 10px;
+  color: var(--sol-ink);
 }
 .solp-metrics-title em {
-  font-style: normal; color: var(--m-soft);
+  font-style: normal; color: var(--m-accent);
   transition: color 600ms var(--par-ease);
 }
 .solp-metrics-sub {
-  color: rgba(255,255,255,0.6);
+  color: var(--sol-ink-soft);
   font-size: clamp(14px, 1.3vw, 17px); max-width: 40ch;
 }
 
@@ -6546,16 +6519,16 @@ a.insights-featured-card {
 .solp-metrics-rail-item.is-past { opacity: 0.65; }
 .solp-metrics-rail-num {
   font-family: var(--sol-display); font-size: 12px; letter-spacing: 0.08em;
-  color: rgba(255,255,255,0.55);
+  color: var(--sol-ink-quiet);
 }
 .solp-metrics-rail-item.is-on .solp-metrics-rail-num { color: var(--m-accent); }
 .solp-metrics-rail-text {
   font-family: var(--sol-body); font-weight: 600; font-size: 13px;
-  letter-spacing: 0.02em; white-space: nowrap;
+  letter-spacing: 0.02em; white-space: nowrap; color: var(--sol-ink);
 }
 .solp-metrics-rail-track {
   grid-column: 1 / -1; height: 2px; border-radius: 999px;
-  background: rgba(255,255,255,0.14); overflow: hidden;
+  background: var(--sol-line); overflow: hidden;
 }
 .solp-metrics-rail-fill {
   display: block; height: 100%; width: 0;
@@ -6586,39 +6559,38 @@ a.insights-featured-card {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--sol-body); font-weight: 600; font-size: 12px;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: rgba(255,255,255,0.78);
+  color: var(--m-accent);
   padding: 7px 15px 7px 12px; margin-bottom: clamp(14px, 1.6vw, 22px);
-  border: 1px solid color-mix(in srgb, var(--m-accent) 48%, transparent);
+  border: 1px solid color-mix(in srgb, var(--m-accent) 42%, transparent);
   border-radius: 999px;
-  background: color-mix(in srgb, var(--m-accent) 14%, transparent);
-  backdrop-filter: blur(6px);
+  background: color-mix(in srgb, var(--m-accent) 10%, transparent);
 }
 .solp-metric-dot2 {
   width: 7px; height: 7px; border-radius: 50%; background: var(--m-accent);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--m-accent) 28%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--m-accent) 22%, transparent);
 }
 .solp-metric-num {
   font-family: var(--sol-display); font-weight: 700;
   font-size: clamp(92px, 15vw, 240px); line-height: 0.86;
   letter-spacing: -0.05em; font-variation-settings: "wdth" 78;
   margin-bottom: clamp(12px, 1.5vw, 22px);
-  background: linear-gradient(118deg, #fff 0%, #fff 52%, var(--m-soft) 100%);
+  background: linear-gradient(118deg, var(--sol-ink) 0%, var(--sol-ink) 46%, var(--m-accent) 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--p, 0) * -30px), 0);
 }
 .solp-metric-label {
   font-family: var(--sol-display); font-weight: 600;
   font-size: clamp(18px, 1.8vw, 26px); letter-spacing: 0.01em;
-  color: #fff; margin-bottom: 10px;
+  color: var(--sol-ink); margin-bottom: 10px;
 }
 .solp-metric-detail {
   font-family: var(--sol-body); font-size: clamp(14px, 1.2vw, 16px);
-  color: rgba(255,255,255,0.66); max-width: 44ch; margin-bottom: 16px;
+  color: var(--sol-ink-soft); max-width: 44ch; margin-bottom: 16px;
 }
 .solp-metric-source {
   display: inline-flex; align-items: center; gap: 9px;
   font-family: var(--sol-body); font-size: 12px; letter-spacing: 0.04em;
-  color: rgba(255,255,255,0.42);
+  color: var(--sol-ink-quiet);
 }
 .solp-metric-source::before {
   content: ''; width: 18px; height: 1px; background: var(--m-accent);
@@ -7281,7 +7253,6 @@ a.insights-featured-card {
   .solp-pillar-object--secondary,
   .solp-manifesto-ghost,
   .solp-manifesto-paper,
-  .solp-metric-photo,
   .solp-metric-num,
   .solp-metrics-ghost,
   .solp-quote-portrait,

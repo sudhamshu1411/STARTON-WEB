@@ -469,10 +469,10 @@ const JumpToPillarScene = () => {
   );
 };
 
-/* SCENE 02 — METRICS / "RECEIPTS". A cinematic, scroll-scrubbed proof reel:
-   full-bleed photos cross-fade beneath a mega ghost numeral with mouse +
-   scroll parallax, while count-up stats and an accent that cycles through
-   the three pillar colours tell the story. A live index rail tracks
+/* SCENE 02 — METRICS / "RECEIPTS". A scroll-scrubbed proof reel that sits
+   bare on the page background (no panel, no imagery): a mega ghost numeral
+   drifts with mouse + scroll parallax behind count-up stats whose accent
+   cycles through the three pillar colours. A live index rail tracks
    intra-metric scroll progress on the right. */
 const METRICS = [
   {
@@ -519,21 +519,6 @@ const MetricsScene = () => {
       className={`solp-scene solp-scene--metrics solp-metrics-${active.accent}`}
     >
       <div className="solp-scene-stage" style={{ '--mx': nx, '--my': ny }}>
-        {/* Full-bleed photographic canvas */}
-        <div className="solp-metrics-canvas" aria-hidden="true">
-          {METRICS.map((m, i) => (
-            <div
-              key={i}
-              className={`solp-metric-photo${
-                i === activeIndex ? ' is-on' : i < activeIndex ? ' is-past' : ''
-              }`}
-              style={{ backgroundImage: `url(${m.photo})` }}
-            ></div>
-          ))}
-          <div className="solp-metrics-grade"></div>
-          <div className="solp-metrics-grain"></div>
-        </div>
-
         {/* Mega ghost numeral */}
         <div className="solp-metrics-ghost" aria-hidden="true">{active.glyph}</div>
 
