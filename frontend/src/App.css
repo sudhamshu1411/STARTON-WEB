@@ -6354,7 +6354,7 @@ a.insights-featured-card {
   background-color: rgb(0 0 0 / 50%);
   backdrop-filter: blur(32px) saturate(160%) contrast(1.06);
   /* border-radius: 999px; */
-  border-radius: 12px;
+  border-radius: 8px;
 
 }
 
