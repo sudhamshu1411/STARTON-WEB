@@ -6450,96 +6450,150 @@ a.insights-featured-card {
 /* =========================================================================
    SCENE 03 — METRICS
    ========================================================================= */
-.solp-scene--metrics { min-height: 380vh; }
+.solp-scene--metrics { min-height: 460vh; }
+.solp-metrics-p1 { --m-accent: var(--sol-p1); --m-soft: var(--sol-p1-soft); }
+.solp-metrics-p2 { --m-accent: var(--sol-p2); --m-soft: var(--sol-p2-soft); }
+.solp-metrics-p3 { --m-accent: var(--sol-p3); --m-soft: var(--sol-p3-soft); }
 .solp-scene--metrics .solp-scene-stage {
-  background: #5540bd00;
-  color: #fff;
+  color: var(--sol-ink);
+  background: transparent;
 }
-.solp-scene--metrics .solp-scene-stage::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
+
+/* Mega ghost numeral — bare on the page background, accent-tinted -------- */
+.solp-metrics-ghost {
+  position: absolute; z-index: 0; right: -2vw; bottom: -12vh;
+  pointer-events: none; user-select: none;
+  font-family: var(--sol-display); font-weight: 700;
+  font-size: clamp(360px, 56vw, 980px);
+  line-height: 0.74; letter-spacing: -0.08em;
+  font-variation-settings: "wdth" 64;
+  color: var(--m-accent);
+  opacity: 0.12;
+  mix-blend-mode: multiply;
+  transform:
+    translate3d(calc(var(--mx, 0) * 40px), calc(var(--p, 0) * -160px + var(--my, 0) * 30px), 0)
+    rotate(calc(-2deg + var(--p, 0) * 8deg));
+  transition: color 700ms var(--par-ease);
+  will-change: transform;
 }
+:root.dark-theme .solp-metrics-ghost {
+  mix-blend-mode: screen;
+  opacity: 0.16;
+}
+
+/* Layout ----------------------------------------------------------------- */
+.solp-metrics-grid { position: relative; z-index: 2; }
+.solp-metrics-head { margin-top: clamp(60px, 8vw, 120px); margin-bottom: clamp(24px, 3vw, 44px); max-width: 36ch; }
 .solp-metrics-label {
-  color: rgba(255,255,255,0.55);
-  margin-bottom: clamp(28px, 3.4vw, 48px);
-  position: relative;
-  z-index: 2;
+  color: var(--sol-ink-quiet);
+  margin-bottom: 14px;
 }
+.solp-metrics-title {
+  font-family: var(--sol-display); font-weight: 700;
+  font-size: clamp(30px, 4vw, 56px); line-height: 1.0;
+  letter-spacing: -0.03em; margin: 0 0 10px;
+  color: var(--sol-ink);
+}
+.solp-metrics-title em {
+  font-style: normal; color: var(--m-accent);
+  transition: color 600ms var(--par-ease);
+}
+.solp-metrics-sub {
+  color: var(--sol-ink-soft);
+  font-size: clamp(14px, 1.3vw, 17px); max-width: 40ch;
+}
+
+/* Live index rail -------------------------------------------------------- */
+.solp-metrics-rail {
+  position: absolute; top: 50%; right: clamp(20px, 4vw, 56px);
+  transform: translateY(-50%);
+  display: flex; flex-direction: column; gap: 18px;
+  z-index: 3; min-width: 200px;
+}
+.solp-metrics-rail-item {
+  display: grid; grid-template-columns: auto 1fr; align-items: center;
+  column-gap: 10px; row-gap: 9px;
+  opacity: 0.4; transition: opacity 420ms var(--par-ease);
+}
+.solp-metrics-rail-item.is-on { opacity: 1; }
+.solp-metrics-rail-item.is-past { opacity: 0.65; }
+.solp-metrics-rail-num {
+  font-family: var(--sol-display); font-size: 12px; letter-spacing: 0.08em;
+  color: var(--sol-ink-quiet);
+}
+.solp-metrics-rail-item.is-on .solp-metrics-rail-num { color: var(--m-accent); }
+.solp-metrics-rail-text {
+  font-family: var(--sol-body); font-weight: 600; font-size: 13px;
+  letter-spacing: 0.02em; white-space: nowrap; color: var(--sol-ink);
+}
+.solp-metrics-rail-track {
+  grid-column: 1 / -1; height: 2px; border-radius: 999px;
+  background: var(--sol-line); overflow: hidden;
+}
+.solp-metrics-rail-fill {
+  display: block; height: 100%; width: 0;
+  background: var(--m-accent); border-radius: 999px;
+  transition: width 120ms linear;
+}
+
+/* Text slides ------------------------------------------------------------ */
 .solp-metrics-stage {
-  position: relative;
-  height: clamp(280px, 50vh, 460px);
-  z-index: 2;
+  position: relative; height: clamp(320px, 54vh, 500px); z-index: 2;
+  max-width: 60ch;
 }
 .solp-metric-slide {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  opacity: 0;
-  transform: translateY(40px) scale(0.94);
-  transition: opacity 700ms var(--sol-ease-soft),
-              transform 700ms var(--sol-ease-soft);
-  pointer-events: none;
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center;
+  opacity: 0; transform: translateY(46px); pointer-events: none;
+  transition: opacity 760ms var(--sol-ease-soft),
+              transform 760ms var(--sol-ease-soft);
 }
-.solp-metric-slide.is-on {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
+.solp-metric-slide.is-on { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.solp-metric-slide.is-past { opacity: 0; transform: translateY(-46px); }
+.solp-metric-slide--p1 { --m-accent: var(--sol-p1); --m-soft: var(--sol-p1-soft); }
+.solp-metric-slide--p2 { --m-accent: var(--sol-p2); --m-soft: var(--sol-p2-soft); }
+.solp-metric-slide--p3 { --m-accent: var(--sol-p3); --m-soft: var(--sol-p3-soft); }
+
+.solp-metric-kicker {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--sol-body); font-weight: 600; font-size: 12px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--m-accent);
+  padding: 7px 15px 7px 12px; margin-bottom: clamp(14px, 1.6vw, 22px);
+  border: 1px solid color-mix(in srgb, var(--m-accent) 42%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--m-accent) 10%, transparent);
 }
-.solp-metric-slide.is-past {
-  opacity: 0;
-  transform: translateY(-40px) scale(0.96);
+.solp-metric-dot2 {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--m-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--m-accent) 22%, transparent);
 }
 .solp-metric-num {
-  font-family: var(--sol-display);
-  font-weight: 700;
-  font-size: clamp(86px, 14vw, 220px);
-  line-height: 0.9;
-  letter-spacing: -0.05em;
-  font-variation-settings: "wdth" 78;
+  font-family: var(--sol-display); font-weight: 700;
+  font-size: clamp(92px, 15vw, 240px); line-height: 0.86;
+  letter-spacing: -0.05em; font-variation-settings: "wdth" 78;
   margin-bottom: clamp(12px, 1.5vw, 22px);
-  background: linear-gradient(115deg, #fff 0%, #fff 60%, var(--sol-p1-soft) 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  background: linear-gradient(118deg, var(--sol-ink) 0%, var(--sol-ink) 46%, var(--m-accent) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  transform: translate3d(calc(var(--mx, 0) * 14px), calc(var(--p, 0) * -30px), 0);
 }
 .solp-metric-label {
-  font-family: var(--sol-display);
-  font-weight: 600;
-  font-size: clamp(16px, 1.6vw, 22px);
-  letter-spacing: 0.04em;
-  color: #fff;
-  margin-bottom: 8px;
+  font-family: var(--sol-display); font-weight: 600;
+  font-size: clamp(18px, 1.8vw, 26px); letter-spacing: 0.01em;
+  color: var(--sol-ink); margin-bottom: 10px;
 }
 .solp-metric-detail {
-  font-family: var(--sol-body);
-  font-style: italic;
-  font-size: 14px;
-  color: rgba(255,255,255,0.6);
-  max-width: 40ch;
+  font-family: var(--sol-body); font-size: clamp(14px, 1.2vw, 16px);
+  color: var(--sol-ink-soft); max-width: 44ch; margin-bottom: 16px;
 }
-.solp-metrics-progress {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  gap: 8px;
-  margin-top: clamp(32px, 4vw, 56px);
+.solp-metric-source {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: var(--sol-body); font-size: 12px; letter-spacing: 0.04em;
+  color: var(--sol-ink-quiet);
 }
-.solp-metrics-dot {
-  width: 22px;
-  height: 2px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 999px;
-  transition: background 320ms var(--sol-ease-soft),
-              width 320ms var(--sol-ease-soft);
-}
-.solp-metrics-dot.is-on {
-  background: #fff;
-  width: 40px;
+.solp-metric-source::before {
+  content: ''; width: 18px; height: 1px; background: var(--m-accent);
 }
 
 /* =========================================================================
@@ -7151,7 +7205,9 @@ a.insights-featured-card {
   .solp-pillar-object--secondary { display: none; }
   .solp-manifesto-ghost { font-size: clamp(120px, 36vw, 260px); }
   .solp-manifesto-paper { display: none; }
-  .solp-metric-ghost { font-size: clamp(220px, 60vw, 380px); }
+  .solp-metrics-ghost { font-size: clamp(220px, 60vw, 380px); bottom: -6vh; }
+  .solp-metrics-rail { display: none; }
+  .solp-metrics-stage { max-width: none; }
   .solp-quote-portrait { display: none; }
   .solp-faq-ambient span { display: none; }
 }
@@ -7197,8 +7253,8 @@ a.insights-featured-card {
   .solp-pillar-object--secondary,
   .solp-manifesto-ghost,
   .solp-manifesto-paper,
-  .solp-metric-photo,
-  .solp-metric-ghost,
+  .solp-metric-num,
+  .solp-metrics-ghost,
   .solp-quote-portrait,
   .solp-quote-video video,
   .solp-final-shell,
@@ -7478,65 +7534,6 @@ a.insights-featured-card {
   opacity: 1;
   transform: translateY(0);
   filter: blur(0);
-}
-
-/* METRICS — full-bleed cinematic photos behind each number ----------- */
-.solp-metric-slide {
-  inset: 0;
-  padding: 0;
-}
-.solp-metric-photo {
-  position: absolute;
-  inset: -6%;
-  z-index: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transform: scale(1.18);
-  transition:
-    opacity 900ms var(--par-ease),
-    transform 1300ms var(--par-ease);
-  filter: brightness(0.32) saturate(0.7) contrast(1.1);
-  pointer-events: none;
-}
-.solp-metric-slide.is-on .solp-metric-photo {
-  opacity: 1;
-  transform: scale(1.04);
-}
-.solp-metric-slide.is-past .solp-metric-photo {
-  opacity: 0;
-  transform: scale(0.96);
-}
-.solp-metric-ghost {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: clamp(20px, 6vw, 80px);
-  pointer-events: none;
-  font-family: var(--sol-display);
-  font-weight: 700;
-  font-size: clamp(320px, 50vw, 820px);
-  line-height: 0.8;
-  letter-spacing: -0.08em;
-  color: rgba(255, 255, 255, 0.05);
-  font-variation-settings: "wdth" 70;
-  user-select: none;
-  transform:
-    translate3d(0, calc(var(--p, 0) * -140px), 0)
-    rotate(calc(-2deg + var(--p, 0) * 8deg));
-  will-change: transform;
-}
-.solp-metric-num,
-.solp-metric-label,
-.solp-metric-detail {
-  position: relative;
-  z-index: 2;
-}
-.solp-metric-num {
-  transform: translate3d(0, calc(var(--p, 0) * -30px), 0);
 }
 
 /* PILLAR — signature 3D object pair --------------------------------- */

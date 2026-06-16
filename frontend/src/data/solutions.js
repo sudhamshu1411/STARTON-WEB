@@ -253,6 +253,10 @@ export const MEDIA_ASSETS = {
     src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1600&q=85',
     alt: 'Two professionals collaborating',
   },
+  metricsRevenueImg: {
+    src: 'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=1600&q=85',
+    alt: 'Financial growth dashboard glowing in the dark',
+  },
   brandObject1: {
     src: 'https://images.unsplash.com/photo-1452780212940-6f5c0d14d848?auto=format&fit=crop&w=1100&q=85',
     alt: 'Polaroid camera on textured surface',

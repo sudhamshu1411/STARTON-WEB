@@ -469,23 +469,69 @@ const JumpToPillarScene = () => {
   );
 };
 
-/* SCENE 02 — METRICS. Three full-bleed cinematic photos cross-fade
-   under giant numerals. Massive ghost "01/02/03" on right. */
+/* SCENE 02 — METRICS / "RECEIPTS". A scroll-scrubbed proof reel that sits
+   bare on the page background (no panel, no imagery): a mega ghost numeral
+   drifts with mouse + scroll parallax behind count-up stats whose accent
+   cycles through the three pillar colours. A live index rail tracks
+   intra-metric scroll progress on the right. */
 const METRICS = [
-  { num: 40,  suffix: '+', label: 'Brands shipped',     detail: 'Across four continents, since 2021.',          photo: MEDIA_ASSETS.metricsBrandImg.src,     glyph: '01' },
-  { num: 3.4, suffix: '×', decimals: 1, label: 'Average ROI', detail: 'Measured over a 12-month window.',       photo: MEDIA_ASSETS.metricsRoiImg.src,       glyph: '02' },
-  { num: 96,  suffix: '%', label: 'Client retention',   detail: 'Most engagements turn into partnerships.',     photo: MEDIA_ASSETS.metricsRetentionImg.src, glyph: '03' },
+  {
+    num: 40, suffix: '+', accent: 'p1', glyph: '01',
+    kicker: 'Portfolio', label: 'Brands shipped',
+    detail: 'Studios, scale-ups and household names — across four continents, since 2021.',
+    source: 'Verified engagements',
+    photo: MEDIA_ASSETS.metricsBrandImg.src,
+  },
+  {
+    num: 3.4, suffix: '×', decimals: 1, accent: 'p2', glyph: '02',
+    kicker: 'Return', label: 'Average ROI',
+    detail: 'Median return our partners report over a rolling twelve-month window.',
+    source: 'Client-reported, trailing 12 months',
+    photo: MEDIA_ASSETS.metricsRoiImg.src,
+  },
+  {
+    num: 96, suffix: '%', accent: 'p3', glyph: '03',
+    kicker: 'Trust', label: 'Client retention',
+    detail: 'Most engagements don\'t end — they renew, expand and become partnerships.',
+    source: 'Trailing 24 months',
+    photo: MEDIA_ASSETS.metricsRetentionImg.src,
+  },
+  {
+    num: 128, prefix: '$', suffix: 'M', accent: 'p1', glyph: '04',
+    kicker: 'Impact', label: 'Revenue influenced',
+    detail: 'Cumulative pipeline and revenue our work has moved for the brands we build.',
+    source: 'Cumulative, attributed',
+    photo: MEDIA_ASSETS.metricsRevenueImg.src,
+  },
 ];
 
 const MetricsScene = () => {
   const { ref, progress } = useSceneProgress();
+  const { nx, ny } = useMousePosition();
   const total = METRICS.length;
   const activeIndex = Math.min(total - 1, Math.floor(progress * total));
+  const localP = Math.min(1, Math.max(0, progress * total - activeIndex));
+  const active = METRICS[activeIndex];
+
   return (
-    <section ref={ref} className="solp-scene solp-scene--metrics">
-      <div className="solp-scene-stage">
-        <div className="container">
-          <div className="solp-metrics-label">— Receipts / 02</div>
+    <section
+      ref={ref}
+      className={`solp-scene solp-scene--metrics solp-metrics-${active.accent}`}
+    >
+      <div className="solp-scene-stage" style={{ '--mx': nx, '--my': ny }}>
+        {/* Mega ghost numeral */}
+        <div className="solp-metrics-ghost" aria-hidden="true">{active.glyph}</div>
+
+        <div className="container solp-metrics-grid">
+          <header className="solp-metrics-head">
+            <div className="solp-metrics-label">— Receipts / 02</div>
+            <h2 className="solp-metrics-title">Proof, not <em>promises.</em></h2>
+            <p className="solp-metrics-sub">
+              Four years. Four continents. Numbers we can stand behind — and the
+              receipts to back every one.
+            </p>
+          </header>
+
           <div className="solp-metrics-stage">
             {METRICS.map((m, i) => (
               <MetricSlide
@@ -496,14 +542,34 @@ const MetricsScene = () => {
               />
             ))}
           </div>
-          <div className="solp-metrics-progress" aria-hidden="true">
-            {METRICS.map((_, i) => (
-              <span
+
+          {/* Live index rail */}
+          <nav className="solp-metrics-rail" aria-hidden="true">
+            {METRICS.map((m, i) => (
+              <div
                 key={i}
-                className={`solp-metrics-dot${i <= activeIndex ? ' is-on' : ''}`}
-              ></span>
+                className={`solp-metrics-rail-item solp-metric-slide--${m.accent}${
+                  i === activeIndex ? ' is-on' : i < activeIndex ? ' is-past' : ''
+                }`}
+              >
+                <span className="solp-metrics-rail-num">{m.glyph}</span>
+                <span className="solp-metrics-rail-text">{m.label}</span>
+                <span className="solp-metrics-rail-track">
+                  <i
+                    className="solp-metrics-rail-fill"
+                    style={{
+                      width:
+                        i < activeIndex
+                          ? '100%'
+                          : i === activeIndex
+                          ? `${localP * 100}%`
+                          : '0%',
+                    }}
+                  ></i>
+                </span>
+              </div>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
     </section>
@@ -514,16 +580,15 @@ const MetricSlide = ({ metric, isActive, isPast }) => {
   const { ref, value } = useCountUp(metric.num, { decimals: metric.decimals || 0 });
   const cls = isActive ? ' is-on' : isPast ? ' is-past' : '';
   return (
-    <div ref={ref} className={`solp-metric-slide${cls}`}>
-      <div
-        className="solp-metric-photo"
-        style={{ backgroundImage: `url(${metric.photo})` }}
-        aria-hidden="true"
-      ></div>
-      <div className="solp-metric-ghost" aria-hidden="true">{metric.glyph}</div>
-      <div className="solp-metric-num">{value}{metric.suffix}</div>
+    <div ref={ref} className={`solp-metric-slide solp-metric-slide--${metric.accent}${cls}`}>
+      <div className="solp-metric-kicker">
+        <span className="solp-metric-dot2" aria-hidden="true"></span>
+        {metric.kicker}
+      </div>
+      <div className="solp-metric-num">{metric.prefix || ''}{value}{metric.suffix}</div>
       <div className="solp-metric-label">{metric.label}</div>
       <div className="solp-metric-detail">{metric.detail}</div>
+      <div className="solp-metric-source">{metric.source}</div>
     </div>
   );
 };
