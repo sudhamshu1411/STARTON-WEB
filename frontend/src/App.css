@@ -6483,7 +6483,7 @@ a.insights-featured-card {
 
 /* Layout ----------------------------------------------------------------- */
 .solp-metrics-grid { position: relative; z-index: 2; }
-.solp-metrics-head { margin-bottom: clamp(24px, 3vw, 44px); max-width: 36ch; }
+.solp-metrics-head { margin-top: clamp(60px, 8vw, 120px); margin-bottom: clamp(24px, 3vw, 44px); max-width: 36ch; }
 .solp-metrics-label {
   color: var(--sol-ink-quiet);
   margin-bottom: 14px;
