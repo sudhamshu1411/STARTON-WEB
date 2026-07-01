@@ -9,7 +9,7 @@ import {
 import PageLayout from '../components/PageLayout';
 import SEO from '../components/SEO';
 import { testimonials } from '../data/projects';
-import { PRICING_TIERS, FAQS, VIDEO_SOURCES, MEDIA_ASSETS, PILLAR_OBJECTS } from '../data/solutions';
+import { PRICING_TIERS, FAQS, VIDEO_SOURCES, MEDIA_ASSETS } from '../data/solutions';
 
 /* =========================================================================
    PILLAR DATA — outcome-first, trimmed for one-screen scenes
@@ -24,6 +24,11 @@ const PILLARS = [
     word: 'Brand',
     lede: 'The story, the system, the soul — engineered so customers choose you on instinct.',
     video: VIDEO_SOURCES.p1,
+    objects: [
+      { src: '/images/frame-transperanttt-opt.webp', role: 'hero',   ar: '1382 / 1236', tag: 'The frame' },
+      { src: '/images/disk-O-opt.webp',              role: 'orbit',  ar: '1036 / 1032', tag: 'The culture' },
+      { src: '/images/flowerr-opt.webp',             role: 'accent', ar: '890 / 1500',  tag: 'The craft' },
+    ],
     services: [
       { icon: Sparkles,  title: 'Brand image & storytelling' },
       { icon: Type,      title: 'Visual identity systems' },
@@ -50,6 +55,11 @@ const PILLARS = [
     word: 'Engine',
     lede: 'Sites that sell. Funnels that don\'t leak. Workflows that handle the boring work.',
     video: VIDEO_SOURCES.p2,
+    objects: [
+      { src: '/images/plane-opt.webp',        role: 'hero',   ar: '860 / 781',  tag: 'The velocity' },
+      { src: '/images/shopping-bag-opt.webp', role: 'orbit',  ar: '681 / 934',  tag: 'The commerce' },
+      { src: '/images/tech-opt.webp',         role: 'accent', ar: '298 / 777',  tag: 'The time back' },
+    ],
     services: [
       { icon: Monitor,     title: 'High-performing websites' },
       { icon: Layout,      title: 'Web apps & landing pages' },
@@ -82,6 +92,11 @@ const PILLARS = [
     word: 'Strategy',
     lede: 'Sharpen who you\'re for, what you stand for, and why you\'re inevitable.',
     video: VIDEO_SOURCES.p3,
+    objects: [
+      { src: '/images/horse-opt.webp',          role: 'hero',   ar: '1153 / 1500', tag: 'The move' },
+      { src: '/images/cash-opt.webp',           role: 'orbit',  ar: '814 / 593',   tag: 'The payoff' },
+      { src: '/images/strategy-light-opt.webp', role: 'accent', ar: '477 / 1424',  tag: 'The clarity' },
+    ],
     services: [
       { icon: Compass,       title: 'Market diagnostics' },
       { icon: Map,           title: 'Go-to-market planning' },
@@ -600,12 +615,9 @@ const MetricSlide = ({ metric, isActive, isPast }) => {
 const PillarScene = ({ pillar }) => {
   const { ref, progress } = useSceneProgress();
   const { nx, ny } = useMousePosition();
-  const videoRef = useVideoPlayInView('0px');
 
-  const objs = PILLAR_OBJECTS[pillar.color] || {};
-  const primary   = objs.primary   ? MEDIA_ASSETS[objs.primary]   : null;
-  const secondary = objs.secondary ? MEDIA_ASSETS[objs.secondary] : null;
-  const glow      = objs.glow || 'rgba(210, 74, 167, 0.45)';
+  const objects = pillar.objects || [];
+  const cards   = pillar.full || [];
 
   const metaOn = progress >= 0.02;
   const wordOn = progress >= 0.06;
@@ -618,35 +630,28 @@ const PillarScene = ({ pillar }) => {
       className={`solp-scene solp-scene--pillar solp-pillar-${pillar.color}`}
     >
       <div className="solp-scene-stage" style={{ '--mx': nx, '--my': ny }}>
-        {/* <div className="solp-pillar-bg" aria-hidden="true"> */}
-          <video
-            ref={videoRef}
-            className="solp-pillar-bg-video"
-            autoPlay muted loop playsInline preload="metadata"
-            poster={pillar.video.poster}
-          >
-            <source src={pillar.video.mp4} type="video/mp4" />
-          </video>
-          <div className="solp-pillar-bg-grade" aria-hidden="true"></div>
-        {/* </div> */}
-
+        {/* Accent-tinted mega numeral, bare on the page background */}
         <div className="solp-pillar-numerals" aria-hidden="true">{pillar.num}</div>
 
-        {secondary && (
-          <div className="solp-pillar-object solp-pillar-object--secondary" aria-hidden="true">
-            <img src={secondary.src} className="solp-pillar-object__img" alt="" loading="lazy" />
-          </div>
-        )}
-
-        {primary && (
-          <div
-            className="solp-pillar-object solp-pillar-object--glow"
-            style={{ '--obj-glow': glow }}
-            aria-hidden="true"
-          >
-            <img src={primary.src} className="solp-pillar-object__img" alt="" loading="lazy" />
-          </div>
-        )}
+        {/* Floating transparent objects — advanced scroll + mouse parallax */}
+        <div className="solp-pillar-objects" aria-hidden="true">
+          {objects.map((o, i) => (
+            <figure
+              key={o.src}
+              className={`solp-pillar-obj solp-pillar-obj--${o.role}`}
+              style={{ '--ar': o.ar, '--oi': i }}
+            >
+              <img
+                src={o.src}
+                className="solp-pillar-obj__img"
+                alt=""
+                loading="lazy"
+                style={{ aspectRatio: o.ar }}
+              />
+              <figcaption className="solp-pillar-obj__tag">{o.tag}</figcaption>
+            </figure>
+          ))}
+        </div>
 
         <div className="container solp-pillar-shell">
           <div className={`solp-pillar-meta${metaOn ? ' is-on' : ''}`}>
@@ -658,18 +663,30 @@ const PillarScene = ({ pillar }) => {
           <h2 className={`solp-pillar-word${wordOn ? ' is-on' : ''}`}>{pillar.word}.</h2>
           <p className={`solp-pillar-lede${ledeOn ? ' is-on' : ''}`}>{pillar.lede}</p>
 
-          <ul className="solp-pillar-list">
-            {pillar.services.map((s, i) => {
-              const threshold = 0.16 + i * (0.55 / pillar.services.length);
+          <ul className="solp-pillar-cards">
+            {cards.map((s, i) => {
+              const threshold = 0.14 + i * (0.5 / cards.length);
               const isOn = progress >= threshold;
               const Icon = s.icon;
               return (
                 <li
                   key={s.title}
-                  className={`solp-pillar-list-item${isOn ? ' is-on' : ''}`}
+                  className={`solp-pillar-card${isOn ? ' is-on' : ''}`}
+                  style={{ '--ci': i }}
                 >
-                  <Icon size={14} className="solp-pillar-list-icon" aria-hidden="true" />
-                  <span>{s.title}</span>
+                  <div className="solp-pillar-card-head">
+                    <span className="solp-pillar-card-icon" aria-hidden="true">
+                      <Icon size={17} />
+                    </span>
+                    <span className="solp-pillar-card-title">{s.title}</span>
+                    <span className="solp-pillar-card-plus" aria-hidden="true"></span>
+                  </div>
+                  <div className="solp-pillar-card-reveal">
+                    <div className="solp-pillar-card-reveal-inner">
+                      <span className="solp-pillar-card-tag">{s.outcomeTag}</span>
+                      <p className="solp-pillar-card-desc">{s.desc}</p>
+                    </div>
+                  </div>
                 </li>
               );
             })}
